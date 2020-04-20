@@ -1,0 +1,2 @@
+include ':app', ':AndroidCore'
+rootProject.name='MyAndroidCore-Sample'

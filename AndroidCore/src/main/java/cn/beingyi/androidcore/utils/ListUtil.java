@@ -1,0 +1,68 @@
+package cn.beingyi.androidcore.utils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+
+public class ListUtil {
+
+
+    public static String ListToString(ArrayList<String> list) {
+        if(list.size()!=0) {
+            StringBuilder sb = new StringBuilder();
+            for (String s : list) {
+                sb.append(",");
+                sb.append(s);
+            }
+            return new String(sb).replaceFirst(",", "");
+        }else{
+            return "";
+        }
+    }
+
+    public static String ListToString(List<String> list) {
+        if(list.size()!=0) {
+            StringBuilder sb = new StringBuilder();
+            for (String s : list) {
+                sb.append(",");
+                sb.append(s);
+            }
+            return new String(sb).replaceFirst(",", "");
+        }else {
+            return "";
+        }
+    }
+
+    public static ArrayList<String> StringToList(String str) {
+        if(str.contains(",")){
+
+            return new ArrayList(Arrays.asList(str.split(",")));
+        }else{
+            if(str.isEmpty()){
+                ArrayList<String> result = new ArrayList<>();
+                result.add("");
+                return result;
+            }else {
+                ArrayList<String> result = new ArrayList<>();
+                result.add(str);
+                return result;
+            }
+        }
+
+    }
+
+
+    public static void removeDuplicate(List<String> list) {
+        HashSet<String> set = new HashSet<String>(list.size());
+        List<String> result = new ArrayList<String>(list.size());
+        for (String str : list) {
+            if (set.add(str)) {
+                result.add(str);
+            }
+        }
+        list.clear();
+        list.addAll(result);
+    }
+
+}
