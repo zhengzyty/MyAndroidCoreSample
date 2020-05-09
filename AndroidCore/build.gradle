@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'//添加
+
 
 android {
     compileSdkVersion 29
@@ -26,6 +28,12 @@ android {
         }
     }
 
+
+    lintOptions{
+        abortOnError false
+    }
+
+
 }
 
 dependencies {
@@ -38,4 +46,21 @@ dependencies {
 
 
     implementation 'com.github.bumptech.glide:glide:4.9.0'
+}
+
+publish{
+    repoName = 'AndroidCore'//远程仓库名字,不指明，默认是上传到maven
+    userOrg = 'FlyingYu'//bintray.com的用户名
+    groupId = 'cn.beingyi.android'//jcenter上的路径  可以随便写，注意规范
+    artifactId = 'projectName'//项目名称
+    publishVersion = '1.0.0'//版本号
+    desc = '描述，不重要'//描述，不重要
+    website = 'https://github.com/'//项目主页
+}
+
+
+tasks.withType(Javadoc) {//防止编码问题
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
 }
