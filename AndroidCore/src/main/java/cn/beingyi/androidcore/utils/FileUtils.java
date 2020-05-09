@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.util.Base64;
 import android.util.Log;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -53,7 +54,7 @@ public class FileUtils
         File file = new File(path);
         Calendar cal = Calendar.getInstance();
         long time = file.lastModified();
-        SimpleDateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         cal.setTimeInMillis(time);
         return formatter.format(cal.getTime()).toString();
 
@@ -72,61 +73,45 @@ public class FileUtils
     }
 
 
-    public static String getMd5ByFile(String path)
-    {
-        String value = null;
-        File file=new File(path);
-		FileInputStream in=null;
-		try
-        {
-		    in = new FileInputStream(file);
-
-            MappedByteBuffer byteBuffer = in.getChannel().map(FileChannel.MapMode.READ_ONLY, 0, file.length());
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            md5.update(byteBuffer);
-			byte[] md5_byte=md5.digest();
-			
-			
-            BigInteger bi = new BigInteger(1, md5_byte);
-            value = bi.toString(16);
-			value=toHexString(md5_byte);
+    /**
+     * 获取文件的md5
+     * @param filePath 文件地址
+     * @return
+     */
+    public static String getFileMd5Value(String filePath){
+        File file = new File(filePath);
+        if(!file.exists() || !file.isFile()){
+            return "";
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            if (null != in)
-            {
-                try
-                {
-                    in.close();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
+        byte[] buffer = new byte[2048];
+        try {
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            FileInputStream in = new FileInputStream(file);
+            while(true){
+                int len = in.read(buffer,0,2048);
+                if(len != -1){
+                    digest.update(buffer, 0, len);
+                }else{
+                    break;
                 }
             }
-        }
-		
-		
+            in.close();
 
-		
-		
-        return value;
+            byte[] md5Bytes  = digest.digest();
+            StringBuffer hexValue = new StringBuffer();
+            for (int i = 0; i < md5Bytes.length; i++) {
+                int val = ((int) md5Bytes[i]) & 0xff;
+                if (val < 16) {
+                    hexValue.append("0");
+                }
+                hexValue.append(Integer.toHexString(val));
+            }
+            return hexValue.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
-
-	private static String toHexString(byte[] bytes) {
-        Formatter formatter = new Formatter();
-        for (byte b : bytes) {          
-            formatter.format("%02x", b);
-        }
-
-        String res = formatter.toString();
-        formatter.close();
-        return res;
-	}
 
 
 
@@ -526,6 +511,37 @@ public class FileUtils
             out.write(buffer, 0, n);
         }
         return out.toByteArray();
+
+    }
+
+
+
+
+    public static void saveFile(String filePath,byte[] data) throws Exception {
+        BufferedOutputStream bos = null;
+        FileOutputStream fos = null;
+        File file = null;
+
+        File dir = new File(filePath);
+        if (!dir.exists() && dir.isDirectory()) {//判断文件目录是否存在
+            dir.mkdirs();
+        }
+        file = new File(filePath);
+        fos = new FileOutputStream(file);
+        bos = new BufferedOutputStream(fos);
+        bos.write(data);
+
+        if (bos != null) {
+
+            bos.close();
+
+        }
+        if (fos != null) {
+
+            fos.close();
+
+        }
+
 
     }
 

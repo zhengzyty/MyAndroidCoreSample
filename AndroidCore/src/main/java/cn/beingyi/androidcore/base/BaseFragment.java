@@ -1,17 +1,29 @@
 package cn.beingyi.androidcore.base;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 
 public abstract class BaseFragment extends Fragment {
+    public Context context;
+    public Activity activity;
     /**
      * Fragment当前状态是否可见
      */
     public boolean isVisible;
+
+    public boolean isPrepared;
+    public boolean mHasLoadedOnce;
+    public boolean isRequested;//是否请求成功
 
     /**
      * inflate布局文件 返回的view
@@ -29,10 +41,22 @@ public abstract class BaseFragment extends Fragment {
         return (T) mView.findViewById(viewId);
     }
 
-    /**
-     * setUserVisibleHint是在onCreateView之前调用的
-     * 设置Fragment可见状态
-     */
+
+    public BaseFragment() {
+        super();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+
+
+        /**
+             * setUserVisibleHint是在onCreateView之前调用的
+             * 设置Fragment可见状态
+             */
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
