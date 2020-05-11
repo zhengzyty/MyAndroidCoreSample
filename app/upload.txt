@@ -1,0 +1,1 @@
+gradlew  bintrayUpload -PbintrayUser=FlyingYu -PbintrayKey=95b0cb925decd8b76396c5a6af923fc34015bfb1 -PdryRun=false

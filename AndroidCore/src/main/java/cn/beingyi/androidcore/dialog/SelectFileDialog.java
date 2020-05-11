@@ -227,7 +227,6 @@ public class SelectFileDialog {
     }
 
     public class FileAdapter extends BaseAdapter {
-
         Context context;
         Activity activity;
         public List<FileInfo> fileList;
