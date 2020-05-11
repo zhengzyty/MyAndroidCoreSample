@@ -80,7 +80,8 @@ public class LoadingDialog extends ProgressDialog
 	
 	@Override
 	public void show()
-	{//开启
+	{
+		//开启
 		super.show();
 		loadIng();
 	}
