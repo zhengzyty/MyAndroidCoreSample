@@ -16,7 +16,7 @@ public class ActivityUtils {
     /**
      * 单一实例
      */
-    public static ActivityUtils getAppManager() {
+    public static ActivityUtils getInstance() {
         if (instance == null) {
             instance = new ActivityUtils();
         }
