@@ -63,7 +63,7 @@ public class RecoveryPMS {
             Method getServiceMethod =
                     serviceManagerClass.getDeclaredMethod("getService", String.class);
             getServiceMethod.setAccessible(true);
-            Object iBinder = getServiceMethod.invoke(null, (Object)(new String[]{"package"}));
+            Object iBinder = getServiceMethod.invoke(null, new String[]{"package"});
 
             Class<?> iPackageManager$Stub$ProxyClass = Class.forName("android.content.pm.IPackageManager$Stub$Proxy");
             Constructor constructor = iPackageManager$Stub$ProxyClass.getDeclaredConstructor(IBinder.class);
