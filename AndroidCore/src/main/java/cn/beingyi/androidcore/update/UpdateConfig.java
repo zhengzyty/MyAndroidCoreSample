@@ -16,6 +16,7 @@ public class UpdateConfig {
     String downloadUrl;
     File saveFilePath;
 
+
     public String getTitle() {
         return title;
     }

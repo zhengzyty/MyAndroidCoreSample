@@ -201,6 +201,20 @@ public class UpdateDialog implements View.OnClickListener {
 
     }
 
+    public void setTitleTextColor(int color){
+        tv_title.setTextColor(color);
+    }
+
+    public void setContentTextColor(int color){
+        tv_content.setTextColor(color);
+    }
+
+
+    public void setButtonTextColor(int color){
+        btn_cancel.setTextColor(color);
+        btn_update.setTextColor(color);
+    }
+
 
 
 }
