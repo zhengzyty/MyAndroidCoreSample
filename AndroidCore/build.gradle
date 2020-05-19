@@ -5,7 +5,7 @@ apply plugin: 'com.jfrog.bintray'
 def siteUrl = 'https://gitee.com/zhengyuiii/MyAndroidCoreSample'
 def gitUrl = 'https://gitee.com/zhengyuiii/MyAndroidCoreSample.git'
 group = "cn.beingyi"
-version = "1.1.2"
+version = "1.0.0"
 
 android {
     compileSdkVersion 29
