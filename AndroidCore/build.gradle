@@ -1,18 +1,21 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
-apply plugin: 'maven'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+def siteUrl = 'https://gitee.com/zhengyuiii/MyAndroidCoreSample'
+def gitUrl = 'https://gitee.com/zhengyuiii/MyAndroidCoreSample.git'
+group = "cn.beingyi"
+version = "1.1.0"
 
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
 
-
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
-
+        versionName version
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -28,35 +31,42 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+            java.srcDirs = ['src/main/java']
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     lintOptions{
         abortOnError false
     }
 
-
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     implementation 'androidx.appcompat:appcompat:1.1.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
-
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 }
-
-publish{
-    repoName = 'maven'//远程仓库名字,不指明，默认是上传到maven
-    userOrg = '4f5da2'//bintray.com的用户名
-    groupId = GROUP_ID//jcenter上的路径  可以随便写，注意规范
-    artifactId = ARTIFACTID//项目名称
-    publishVersion = LIBRARY_VERSION//版本号
-    desc = '描述，不重要'//描述，不重要
-    website = 'https://github.com/'//项目主页
-}
+//
+//publish{
+//    repoName = 'maven'//远程仓库名字,不指明，默认是上传到maven
+//    userOrg = '4f5da2'//bintray.com的用户名
+//    groupId = GROUP_ID//jcenter上的路径  可以随便写，注意规范
+//    artifactId = ARTIFACTID//项目名称
+//    publishVersion = LIBRARY_VERSION//版本号
+//    desc = '描述，不重要'//描述，不重要
+//    website = 'https://github.com/'//项目主页
+//}
 
 
 tasks.withType(Javadoc) {//防止编码问题
@@ -65,13 +75,75 @@ tasks.withType(Javadoc) {//防止编码问题
     options.addStringOption('charSet', 'UTF-8')
 }
 
+//uploadArchives{
+//    repositories.mavenDeployer{
+//        repository(url:LOCAL_REPO_URL)
+//        pom.groupId = GROUP_ID
+//        pom.artifactId = ARTIFACTID
+//        pom.version = LIBRARY_VERSION
+//    }
+//}
 
-
-uploadArchives{
-    repositories.mavenDeployer{
-        repository(url:LOCAL_REPO_URL)
-        pom.groupId = GROUP_ID
-        pom.artifactId = ARTIFACTID
-        pom.version = LIBRARY_VERSION
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                name 'AndroidCore'
+                description 'An android lib '
+                url siteUrl
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'flyingyu'
+                        name 'Zheng Yu'
+                        email 'zhengyuzyyou@yeah.net'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+task javadoc(type: Javadoc) {
+    options.encoding = "UTF-8"
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = "AndroidCore"
+        userOrg = "4f5da2"
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
     }
 }
