@@ -57,16 +57,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 }
-//
-//publish{
-//    repoName = 'maven'//远程仓库名字,不指明，默认是上传到maven
-//    userOrg = '4f5da2'//bintray.com的用户名
-//    groupId = GROUP_ID//jcenter上的路径  可以随便写，注意规范
-//    artifactId = ARTIFACTID//项目名称
-//    publishVersion = LIBRARY_VERSION//版本号
-//    desc = '描述，不重要'//描述，不重要
-//    website = 'https://github.com/'//项目主页
-//}
 
 
 tasks.withType(Javadoc) {//防止编码问题
@@ -75,14 +65,6 @@ tasks.withType(Javadoc) {//防止编码问题
     options.addStringOption('charSet', 'UTF-8')
 }
 
-//uploadArchives{
-//    repositories.mavenDeployer{
-//        repository(url:LOCAL_REPO_URL)
-//        pom.groupId = GROUP_ID
-//        pom.artifactId = ARTIFACTID
-//        pom.version = LIBRARY_VERSION
-//    }
-//}
 
 install {
     repositories.mavenInstaller {
